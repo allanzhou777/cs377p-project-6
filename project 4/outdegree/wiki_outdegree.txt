@@ -1,0 +1,4 @@
+# nodes with outdegree 0: 1
+# nodes with outdegree 1: 4
+# nodes with outdegree 2: 5
+# nodes with outdegree 3: 1

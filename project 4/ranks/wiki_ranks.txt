@@ -1,0 +1,13 @@
+Node 1: PageRank = 0.0325812
+Node 2: PageRank = 0.376949
+Node 3: PageRank = 0.335738
+Node 4: PageRank = 0.0388402
+Node 5: PageRank = 0.0804047
+Node 6: PageRank = 0.0388402
+Node 7: PageRank = 0.0161145
+Node 8: PageRank = 0.0161145
+Node 9: PageRank = 0.0161145
+Node 10: PageRank = 0.0161145
+Node 11: PageRank = 0.0161145
+
+0.0325812 + 0.376949 + 0.335738 + 0.0388402 + 0.0804047 + 0.0388402 + 0.0161145 + 0.0161145 + 0.0161145 +  0.0161145 +  0.0161145

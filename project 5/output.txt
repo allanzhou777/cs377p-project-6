@@ -1,0 +1,15 @@
+-----1 threads-----
+Avg elapsed time = 951450 nanoseconds
+Final pi approximation (100000 steps): 3.13507174624903761639
+-----2 threads-----
+Avg elapsed time = 532245 nanoseconds
+Final pi approximation (100000 steps): 3.13507174777679331612
+-----4 threads-----
+Avg elapsed time = 222468 nanoseconds
+Final pi approximation (100000 steps): 3.13507174761297013887
+-----8 threads-----
+Avg elapsed time = 239385 nanoseconds
+Final pi approximation (100000 steps): 3.13507174728665871655
+-----16 threads-----
+Avg elapsed time = 338443 nanoseconds
+Final pi approximation (100000 steps): 3.13507174743816152684

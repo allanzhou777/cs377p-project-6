@@ -1,0 +1,12 @@
+
+
+
+# nodes with outdegree 0: 0
+# nodes with outdegree 1: 41169
+# nodes with outdegree 2: 40354
+# nodes with outdegree 3: 124535
+# nodes with outdegree 4: 56998
+# nodes with outdegree 5: 1124
+# nodes with outdegree 6: 157
+# nodes with outdegree 7: 8
+# nodes with outdegree 8: 1
