@@ -40,6 +40,8 @@ bool DEBUG_ON = true;
 string input_file;
 bool made_change = false;
 std::atomic<bool> made_change_atomic;
+vector<std::mutex> mtx_nodes(264346); // road
+// vector<std::mutex> mtx_nodes(32768); // rmat
 
 void read_dimacs_file(const string &filename)
 {
@@ -168,12 +170,12 @@ void *parallel_bf_global_helper (void *arg) {
       {
 
 
-        mtx_global.lock();
+        mtx_nodes[v].lock();
         if (distances[u] != INT32_MAX && distances[u] + weight < distances[v]) {
           distances[v] = distances[u] + weight;
           made_change_atomic = true;
         }
-        mtx_global.unlock();
+        mtx_nodes[v].unlock();
 
 
       }
@@ -189,6 +191,8 @@ void parallel_bf_global(int num_threads)
   pthread_t threads[num_threads];            // array of thread identifiers
   struct ThreadData threadData[num_threads]; // array to hold thread data
   distances.resize(numNodes + 1, INT32_MAX);
+
+
     // initialize starting node to have distance 0
       if (input_file == "./dimacs/wiki.dimacs")
       {
