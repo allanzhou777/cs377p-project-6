@@ -40,8 +40,28 @@ bool DEBUG_ON = true;
 string input_file;
 bool made_change = false;
 std::atomic<bool> made_change_atomic;
-vector<std::mutex> mtx_nodes(264346); // road
+
+
+class SpinLock {
+  std::atomic_flag flag = ATOMIC_FLAG_INIT;
+
+  public:
+    void lock() {
+      while (flag.test_and_set(std::memory_order_acquire)) {
+        // Busy-wait
+      }
+    }
+
+    void unlock() {
+      flag.clear(std::memory_order_release);
+    }
+};
+
+
+vector<SpinLock> mtx_nodes(264346); // road
 // vector<std::mutex> mtx_nodes(32768); // rmat
+
+
 
 void read_dimacs_file(const string &filename)
 {
@@ -147,18 +167,12 @@ void seq_bf()
   }
 }
 
-
-
-
-
 void *parallel_bf_global_helper (void *arg) {
 
   struct ThreadData *data = (struct ThreadData *)arg;
   int thread_id = data->thread_id;
   int num_threads = data->num_threads;
 
-  // print_some_edges();
-  
   
   for (int u = thread_id; u <= numNodes; u += num_threads)
   {

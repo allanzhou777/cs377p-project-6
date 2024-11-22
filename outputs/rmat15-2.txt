@@ -4,22 +4,21 @@ numEdges: 524288
 
 
 
-
-
 Running with 1 threads...
-Elapsed time: 0.117488 seconds
+Elapsed time: 0.112111 seconds
 
 Running with 2 threads...
-Elapsed time: 0.107214 seconds
+Elapsed time: 0.110831 seconds
 
 Running with 4 threads...
-Elapsed time: 0.119689 seconds
+Elapsed time: 0.11154 seconds
 
 Running with 8 threads...
-Elapsed time: 0.0922831 seconds
+Elapsed time: 0.0965819 seconds
 
 Running with 16 threads...
-Elapsed time: 0.0736067 seconds
+Elapsed time: 0.0720804 seconds
+
 
 
 
@@ -32794,7 +32793,7 @@ node 32766: 2147483647
 node 32767: 2147483647
 
 Running with 2 threads...
-Elapsed time: 0.107214 seconds
+Elapsed time: 0.110831 seconds
 ----------Final shortest paths for each node----------
 node 1: 0
 node 2: 0
@@ -65565,7 +65564,7 @@ node 32766: 2147483647
 node 32767: 2147483647
 
 Running with 4 threads...
-Elapsed time: 0.119689 seconds
+Elapsed time: 0.11154 seconds
 ----------Final shortest paths for each node----------
 node 1: 0
 node 2: 0
@@ -98336,7 +98335,7 @@ node 32766: 2147483647
 node 32767: 2147483647
 
 Running with 8 threads...
-Elapsed time: 0.0922831 seconds
+Elapsed time: 0.0965819 seconds
 ----------Final shortest paths for each node----------
 node 1: 0
 node 2: 0
@@ -131107,7 +131106,7 @@ node 32766: 2147483647
 node 32767: 2147483647
 
 Running with 16 threads...
-Elapsed time: 0.0736067 seconds
+Elapsed time: 0.0720804 seconds
 ----------Final shortest paths for each node----------
 node 1: 0
 node 2: 0
