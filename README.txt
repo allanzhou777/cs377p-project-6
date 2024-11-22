@@ -6,7 +6,7 @@
 
 ## commands
 
-g++ -std=c++11 -o bf bf.cpp -lpthread && ./bf ./dimacs/road-NY.dimacs > temp.txt
+g++ -std=c++14 -o bf bf.cpp -lpthread && ./bf ./dimacs/road-NY.dimacs > temp.txt
 
 
 

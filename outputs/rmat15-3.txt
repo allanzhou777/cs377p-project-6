@@ -1,8 +1,28 @@
 numNodes: 32768
 numEdges: 524288
 
+
+
 Running with 1 threads...
 Elapsed time: 0.0994057 seconds
+
+Running with 2 threads...
+Elapsed time: 0.103424 seconds
+
+Running with 4 threads...
+Elapsed time: 0.114071 seconds
+
+Running with 8 threads...
+Elapsed time: 0.0897777 seconds
+
+Running with 16 threads...
+Elapsed time: 0.0745936 seconds
+
+
+
+
+
+
 ----------Final shortest paths for each node----------
 node 1: 0
 node 2: 0

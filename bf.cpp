@@ -35,7 +35,8 @@ std::mutex mtx_global;
 int numNodes = 0;
 int numEdges = 0;
 vector<vector<Edge>> all_edges; // keep in mind, 1 indexed, so all_edges[0] is null
-vector<int> distances;
+// vector<int> distances;
+std::unique_ptr<std::atomic<int>[]> distances;
 bool DEBUG_ON = true;
 string input_file;
 bool made_change = false;
@@ -184,12 +185,19 @@ void *parallel_bf_global_helper (void *arg) {
       {
 
 
-        mtx_nodes[v].lock();
-        if (distances[u] != INT32_MAX && distances[u] + weight < distances[v]) {
-          distances[v] = distances[u] + weight;
-          made_change_atomic = true;
+        int old_distance = distances[v].load(std::memory_order_relaxed);
+        int new_distance = distances[u] + weight;
+
+        while (new_distance < old_distance) {
+            if (distances[v].compare_exchange_weak(
+                    old_distance, new_distance,
+                    std::memory_order_acq_rel,
+                    std::memory_order_relaxed)) {
+                made_change_atomic = true;
+                break;
+            }
+            // Retry if CAS fails and old_distance is updated.
         }
-        mtx_nodes[v].unlock();
 
 
       }
@@ -204,21 +212,20 @@ void parallel_bf_global(int num_threads)
 
   pthread_t threads[num_threads];            // array of thread identifiers
   struct ThreadData threadData[num_threads]; // array to hold thread data
-  distances.resize(numNodes + 1, INT32_MAX);
+  distances = std::make_unique<std::atomic<int>[]>(numNodes + 1);
+
+  for (int i = 0; i <= numNodes; ++i) {
+    distances[i].store(INT32_MAX, std::memory_order_relaxed);
+  }
 
 
     // initialize starting node to have distance 0
-      if (input_file == "./dimacs/wiki.dimacs")
-      {
-        distances[1] = 0;
-      }
-      else if (input_file == "./dimacs/rmat15.dimacs")
-      {
-        distances[1] = 0;
-      }
-      else if (input_file == "./dimacs/road-NY.dimacs")
-      {
-        distances[140961] = 0;
+      if (input_file == "./dimacs/wiki.dimacs") {
+        distances[1].store(0, std::memory_order_relaxed);
+      } else if (input_file == "./dimacs/rmat15.dimacs") {
+        distances[1].store(0, std::memory_order_relaxed);
+      } else if (input_file == "./dimacs/road-NY.dimacs") {
+        distances[140961].store(0, std::memory_order_relaxed);
       }
 
   
@@ -229,7 +236,7 @@ void parallel_bf_global(int num_threads)
     int rc;
     made_change_atomic = false;
 
-    for (int i = 1; i <= num_threads; i++)
+    for (int i = 0; i < num_threads; i++)
     {
       threadData[i].thread_id = i;
       threadData[i].num_threads = num_threads;
@@ -244,7 +251,7 @@ void parallel_bf_global(int num_threads)
 
 
 
-    for (int i = 1; i <= num_threads; i++)
+    for (int i = 0; i < num_threads; i++)
     {
       pthread_join(threads[i], NULL);
     }
@@ -274,46 +281,35 @@ void parallel_bf_global(int num_threads)
     }
   }
 }
-
-
-int main(int argc, char *argv[])
-{
-
-  if (argc < 2)
-  {
-    cerr << "Usage: " << argv[0] << " <input_file>" << endl;
-    return 1;
-  }
-
-  input_file = argv[1];
-
-  read_dimacs_file(input_file);
-
-  // print_some_edges();
-
-  // seq_bf();
-
-  vector<int> thread_counts = {1, 2, 4, 8, 16};
-  for (int num_threads : thread_counts)
-  {
-    cout << "\nRunning with " << num_threads << " threads..." << endl;
-
-    distances.assign(numNodes + 1, INT32_MAX); // Reset distances
-    if (input_file == "./dimacs/wiki.dimacs")
-    {
-      distances[1] = 0;
-    }
-    else if (input_file == "./dimacs/rmat15.dimacs")
-    {
-      distances[1] = 0;
-    }
-    else if (input_file == "./dimacs/road-NY.dimacs")
-    {
-      distances[140961] = 0;
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        cerr << "Usage: " << argv[0] << " <input_file>" << endl;
+        return 1;
     }
 
-    parallel_bf_global(num_threads);
-  }
+    input_file = argv[1];
 
-  return 0;
+    read_dimacs_file(input_file);
+
+    vector<int> thread_counts = {1, 2, 4, 8, 16};
+    for (int num_threads : thread_counts) {
+        cout << "\nRunning with " << num_threads << " threads..." << endl;
+
+        // Allocate and initialize distances
+        distances = std::make_unique<std::atomic<int>[]>(numNodes + 1);
+        for (int i = 0; i <= numNodes; ++i) {
+            distances[i].store(INT32_MAX, std::memory_order_relaxed);
+        }
+
+        // Set starting node distance
+        if (input_file == "./dimacs/wiki.dimacs" || input_file == "./dimacs/rmat15.dimacs") {
+            distances[1].store(0, std::memory_order_relaxed);
+        } else if (input_file == "./dimacs/road-NY.dimacs") {
+            distances[140961].store(0, std::memory_order_relaxed);
+        }
+
+        parallel_bf_global(num_threads);
+    }
+
+    return 0;
 }

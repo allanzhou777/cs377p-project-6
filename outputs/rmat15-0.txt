@@ -1,6 +1,10 @@
 numNodes: 32768
 numEdges: 524288
+
+
 Elapsed time: 0.0892434 seconds
+
+
 ----------Final shortest paths for each node----------
 node 1: 0
 node 2: 0
