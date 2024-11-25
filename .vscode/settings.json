@@ -102,6 +102,12 @@
     "streambuf": "cpp",
     "cinttypes": "cpp",
     "typeinfo": "cpp",
-    "chrono": "cpp"
+    "chrono": "cpp",
+    "mutex": "cpp",
+    "ctime": "cpp",
+    "condition_variable": "cpp",
+    "map": "cpp",
+    "ratio": "cpp",
+    "thread": "cpp"
   }
 }
